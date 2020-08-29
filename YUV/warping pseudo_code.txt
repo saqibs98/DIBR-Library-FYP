@@ -1,0 +1,82 @@
+1)
+There are total 300 frames and you have to compute (left virtual view, right virtual view and combined virtual view for each frame)
+so read all the frames one by one and All the tasks i.e (computation of left virtual view, right virtual view and combined virtual) 
+performed inside the loop.
+e.g.
+
+2)
+for i = 1:10 === //(for 10 frames)
+//read left view
+[yl,ul,vl] = yuv_import(view_Left,....);
+
+//read left depth
+[yld,uld,vld] = yuv_import(depth_view_left,...);
+
+//read right view
+[yr,ur,vr] = yuv_import(view_right,....);
+
+//read right depth
+[yrd,urd,vrd] = yuv_import(depth_view_right,...);
+
+
+*note
+loadData.m file contains all the information of files. e.g.
+camFileNameLeft = "E:\University_data\MSCS\3rdSemester\research\data\3DV\Balloons\balloons_c_1_1024x768.yuv";
+depFileNameLeft = "E:\University_data\MSCS\3rdSemester\research\data\3DV\Balloons\balloons_d_1_1024x768.yuv";
+ change the location of folders as per your file locations. 
+
+3)
+yuv_import returns the data in cell dataform and you can't access its values directly unless it is in double dataform
+so convert cell to double as
+yl = yl{1};
+yld = yld{1};
+ 
+
+4) compute actual depth by implementing the formula given in the reading material
+e.g. 
+     left_depth =  1./(YLd/255*(zN- zF) + zF); 
+   
+5) compute left virtual view
+
+        create a separate function and call this function from main.
+        pass the arguments of left view
+           [ylv] = left_virtual_view(yl{1},ul{1},vl,...); 
+	
+	
+	create an array for left virtual view inside the function
+	//YLV  and initialize it with zeros
+
+	for height = 1: 1024
+	   for width = 1:768
+		i) compute shift by implementing the formula given in reading material 
+	       ii) check that shift inside the range (shift_value < width and shift_value > 0)
+              iii) store the values in left virtual view array 
+			as : ylv(_,_) = yl(_,_);
+		i
+6) compute right virtual view by following the same steps mentioned in (5)
+		
+		pass the arguments of right view
+		[yrv] = right_virtual_view(yr,ur,vr,...);	
+
+
+7) then merge both the views		//pass ylv,ulv,vlv,yrv,urv,vrv
+	i) create a separate function and pass ylv and yrv
+       ii) create an array for merge view (Yv) and initialize it with zeros
+      iii) check 4 conditions 
+ 	if (ylv == 0 and yrv !=0 )
+	 
+	//merege	Yv(_,_) = yrv(_,_);
+	//Uv,Vv value store 
+
+ 	else if (ylv != 0 and yrv ==0 )
+
+		Yv(_,_) = ylv(_,_); 
+
+ 	if (ylv != 0 and yrv !=0 )
+
+		Yv(_,_) = 0.5 * (ylv(_,_) + yrv(_,_)); 
+
+
+ 	if (ylv == 0 and yrv ==0 )
+		
+		skip (As arrray is already initialized with zeros)		
