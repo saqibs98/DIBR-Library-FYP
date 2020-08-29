@@ -1,0 +1,18 @@
+; compressed data..means do not display it
+
+clc
+closeall
+clearall
+
+imshow('')
+figure, imshow('')
+imread('')
+
+size()
+
+imresize(A,2)	// By a factor of 2 i.e double it 
+
+imrotate(A,45)	// With a 45 degree rotation
+
+imwrite(A, 'file_name.ext');
+imtranslate(A, [5 15]);
